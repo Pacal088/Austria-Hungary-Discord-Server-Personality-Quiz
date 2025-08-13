@@ -1,11 +1,4 @@
-# Values Quiz Starter (8values-style)
-
-A tiny, dependency-free template for a values/personality quiz you can host on **GitHub Pages**.
-
-## Quick start
-1. Put these files in a new GitHub repo.
-2. Enable **Settings → Pages → Deploy from branch → main → /(root)**.
-3. Share your link!
+Hi this will be our epic autism test
 
 ## Customize
 - **Axes & labels**: edit `AXES` in `app.js`.
