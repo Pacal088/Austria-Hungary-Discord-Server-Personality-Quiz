@@ -1,10 +1,20 @@
-// Basic 8values-style quiz engine (no external libs).
-// Axes: edit names here to rebrand your quiz.
 const AXES = {
-  hist: { left: "Yhorm", right: "Pacal" },
-  val: { left: "Frakk",   right: "Porg"   },
-  prog:{ left: "Owl",  right: "Abe" },
-  cult:  { left: "The People",   right: "Inami" }
+  hist: {
+    left: "Yhorm", leftIcon: "icons/yhormq.png",
+    right: "Pacal", rightIcon: "icons/pacalq.png"
+  },
+  val: {
+    left: "Frakk", leftIcon: "icons/frakkq.png",
+    right: "Porg", rightIcon: "icons/porgq.png"
+  },
+  prog: {
+    left: "Owltz", leftIcon: "icons/owlq.png",
+    right: "Abe", rightIcon: "icons/abeq.png"
+  },
+  cult: {
+    left: "The People", leftIcon: "icons/peopleq.png",
+    right: "Inami", rightIcon: "icons/inamiq.png"
+  }
 };
 
 // State
@@ -73,10 +83,12 @@ window.addEventListener("keydown", (e) => {
 function renderResults() {
   const pctRight = {};
   for (const axis of Object.keys(AXES)) {
-    const total = Math.max(1, totals[axis]); // avoid /0 if axis unused
-    // scores range [-total, +total] ⇒ map to [0,100]
+    const total = Math.max(1, totals[axis]);
     pctRight[axis] = Math.round(((scores[axis] + total) / (2 * total)) * 100);
   }
+
+  // Get general result based on majority combination
+  const general = getGeneralResult(pctRight);
 
   const axesHtml = Object.keys(AXES).map(axis => {
     const meta = AXES[axis];
@@ -85,12 +97,21 @@ function renderResults() {
     return `
       <div class="axis">
         <div class="axis-head">
-          <div><strong>${meta.left}</strong> vs <strong>${meta.right}</strong></div>
           <div class="pct">${left}% • ${right}%</div>
         </div>
-        <div class="bar" role="img" aria-label="${meta.left} ${left} percent, ${meta.right} ${right} percent">
-          <div class="left"  style="width:${left}%"></div>
-          <div class="right" style="width:${right}%"></div>
+        <div class="bar-with-icons">
+          <img src="${meta.leftIcon}" alt="${meta.left}" class="axis-icon axis-icon-left">
+          <span class="bar-pct-left">${left}%</span>
+          <div class="bar" role="img" aria-label="${meta.left} ${left} percent, ${meta.right} ${right} percent">
+            <div class="left"  style="width:${left}%"></div>
+            <div class="right" style="width:${right}%"></div>
+          </div>
+          <span class="bar-pct-right">${right}%</span>
+          <img src="${meta.rightIcon}" alt="${meta.right}" class="axis-icon axis-icon-right">
+        </div>
+        <div class="axis-labels">
+          <strong class="axis-label-left">${meta.left}</strong>
+          <strong class="axis-label-right">${meta.right}</strong>
         </div>
       </div>
     `;
@@ -100,6 +121,10 @@ function renderResults() {
 
   root.innerHTML = `
     <h2>Your Results</h2>
+    <div class="general-result">
+      <h3>${general.title}</h3>
+      <p>${general.description}</p>
+    </div>
     <div class="results">${axesHtml}</div>
     <div class="actions">
       <button class="action" onclick="location.reload()">Retake</button>
@@ -157,3 +182,84 @@ function copyLink() {
   }
   renderQuestion();
 })();
+
+const GENERAL_RESULTS = {
+  "Yhorm-Frakk-Owltz-The People": {
+    title: "Turbo ADHD Autism Retard",
+    description: "Truly the most based and redpilled person on the planet. You are a true autist, and you are proud of it. You are the pinnacle of human evolution, and you know it."
+  },
+  "Yhorm-Porg-Owltz-The People": {
+    title: "The Simple Man",
+    description: "Got me Yhorm, Got me Porg, Got me Owltz, Got me The People." 
+  },
+  "Yhorm-Frakk-Owltz-Inami": {
+    title: "Yo ass spoilt",
+    description: "Sorry is the truth."
+  },
+  "Yhorm-Frakk-Abe-Inami": {
+    title: "Elitist Chud",
+    description: "Hate brown people, hate peasantoids, most definitely hate slovaks."
+  },
+  "Yhorm-Porg-Abe-Inami": {
+    title: "Muh Traidtion",
+    description: "Don't even deny it..."
+  },
+  "Yhorm-Porg-Owltz-Inami": {
+    title: "Two birds and two chuds walk into a bar uuuuhhh",
+    description: "Hilarity ensues."
+  },
+  "Yhorm-Frakk-Owltz-The People": {
+    title: "How does one even get here...",
+    description: "Sorry no results for this combination. Fuck you!"
+  },
+  "Pacal-Frakk-Owltz-Inami": {
+    title: "Nerd",
+    description: "You're a nerd, and you're proud of it."
+  },
+  "Pacal-Frakk-Abe-Inami": {
+    title: "Salmon",
+    description: "You got to be Salmon, like cahman."
+  },
+  "Pacal-Frakk-Abe-The People": {
+    title: "Salmon?",
+    description: "Okay but for real now you got to be Salmon."
+  },
+  "Pacal-Frakk-Owltz-The People": {
+    title: "Woke and Gay",
+    description: "You are woke and proud of it."
+  },
+  "Pacal-Frakk-Owltz-Inami": {
+    title: "The Aristocrat",
+    description: "You are a true elitist."
+  },
+  "Pacal-Porg-Abe-Inami": {
+    title: "The Contrarian",
+    description: "You're a charm aren't you?"
+  },
+  "Pacal-Porg-Owltz-Inami": {
+    title: "The Rebel",
+    description: "You don't follow the crowd."
+  },
+  "Pacal-Porg-Owltz-The People": {
+    title: "The Communist",
+    description: "The history of hitherto societies is the history of class struggles."
+  },
+  "Pacal-Porg-Abe-The People": {
+    title: "Okay but for real now you got to be Salmon",
+    description: "Are you?"
+  },
+  // Add more combinations as needed...
+};
+
+function getGeneralResult(pctRight) {
+  // Get majority side for each axis
+  const majority = Object.keys(AXES).map(axis => {
+    const meta = AXES[axis];
+    return pctRight[axis] >= 50 ? meta.right : meta.left;
+  });
+  const key = majority.join("-");
+  return GENERAL_RESULTS[key] || {
+    title: "Undefined Type",
+    description: "Your combination is unique and does not match a predefined type."
+  };
+}

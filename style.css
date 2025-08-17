@@ -121,20 +121,65 @@ h1 { margin: 0.25rem 0 0.5rem; color: var(--text); }
   margin-bottom: 8px;
 }
 
-.bar {
+.axis-icon {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+}
+
+.bar-with-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   position: relative;
-  height: 18px;
-  background: var(--bar);
-  border-radius: 999px;
+}
+
+.bar {
+  flex: 1;
+  display: flex;
+  height: 32px;
+  background: #222b3a;
+  border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
-.bar .left, .bar .right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+.bar .left {
+  background: #3b6fc4; /* More saturated blue */
+  height: 100%;
 }
-.bar .left  { left: 0; background: var(--bad); }
-.bar .right { right: 0; background: var(--good); }
+.bar .right {
+  background: #e05a5a; /* More saturated red */
+  height: 100%;
+}
+
+/* Percentage labels on sides of bar */
+.bar-with-icons .bar-pct-left,
+.bar-with-icons .bar-pct-right {
+  font-size: 1.1em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  min-width: 48px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.bar-with-icons .bar-pct-left {
+  margin-right: 8px;
+}
+
+.bar-with-icons .bar-pct-right {
+  margin-left: 8px;
+}
+
+.axis-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.axis-label-left, .axis-label-right {
+  font-size: 1em;
+}
 
 .pct { font-variant-numeric: tabular-nums; font-size: 0.95rem; color: var(--muted); }
 
