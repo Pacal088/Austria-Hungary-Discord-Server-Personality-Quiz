@@ -20,7 +20,7 @@ const QUESTIONS = [
   { text: "I believe gender is independent of assigned sex.", effect: { hist: 1, val: -1, prog: -1 } },
   { text: "I would shoot the students manning the barricades.", effect: { hist: -1 } },
   { text: "Humans exist in a hierarchy for a reason, some deserve to be at the top, while others do not.", effect: { hist: -1, prog: 1, cult: 1 } },
-  { text: "I would rather be a peasant in the modern day then a king in medieval times", effect: { hist: 1, } },
+  { text: "I would rather be a peasant in the modern day than a king in medieval times", effect: { hist: 1, } },
   { text: "I consider myself woke.", effect: { val: -1, hist: 1, prog: -1 } },
   { text: "I'd be comfortable in a polyamorous relationship.", effect: { val: -1, cult: -1 } },
   { text: "I am lazy and cannot be bothered to write my own questions", effect: { val: 1 } },
