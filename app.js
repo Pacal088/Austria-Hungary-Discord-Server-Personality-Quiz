@@ -117,14 +117,6 @@ function renderResults() {
     `;
   }).join("");
 
-  // Encode the majority result for sharing
-  const majority = Object.keys(AXES).map(axis => {
-    const meta = AXES[axis];
-    return pctRight[axis] >= 50 ? meta.right : meta.left;
-  });
-  const shareKey = majority.join("-");
-  const shareUrl = encodeURIComponent(location.origin + location.pathname + "?result=" + encodeURIComponent(shareKey));
-
   root.innerHTML = `
     <h2>Your Results</h2>
     <div class="general-result">
@@ -134,19 +126,9 @@ function renderResults() {
     <div class="results">${axesHtml}</div>
     <div class="actions">
       <button class="action" onclick="location.reload()">Retake</button>
-      <button class="action" onclick="copyLink('${shareUrl}')">Copy share link</button>
       <a class="action" href="index.html" download>Download this page</a>
     </div>
   `;
-
-  // Store for share
-  history.replaceState(null, "", "?result=" + encodeURIComponent(shareKey));
-}
-
-// Update copyLink to use the new parameter
-function copyLink(url) {
-  navigator.clipboard.writeText(decodeURIComponent(url));
-  alert("Share link copied!");
 }
 
 // If a share code exists, show results directly
