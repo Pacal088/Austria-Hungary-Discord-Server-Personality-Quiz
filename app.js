@@ -56,14 +56,33 @@ function renderQuestion() {
     <div class="meta">
       <small class="hint">Tip: Use number keys 1–5 to answer quickly.</small>
     </div>
+    <div class="actions">
+      ${i > 0 ? `<button class="action" onclick="goBack()">Back</button>` : ""}
+    </div>
   `;
 }
 
+// Add goBack function
+function goBack() {
+  if (i > 0) {
+    i--;
+    // Undo last answer
+    const q = QUESTIONS[i];
+    for (const [axis, weight] of Object.entries(q.effect)) {
+      scores[axis] -= weight * lastAnswers[i]; // lastAnswers stores previous answer values
+    }
+    renderQuestion();
+  }
+}
+
+// Track last answers for undo
+let lastAnswers = [];
 function answer(val) {
   const q = QUESTIONS[i];
   for (const [axis, weight] of Object.entries(q.effect)) {
     scores[axis] += weight * val; // val in [-2,-1,0,1,2]
   }
+  lastAnswers[i] = val;
   i++;
   if (i < QUESTIONS.length) {
     renderQuestion();
@@ -189,7 +208,7 @@ const GENERAL_RESULTS = {
     description: "Hate brown people, hate peasantoids, most definitely hate slovaks."
   },
   "Yhorm-Porg-Abe-Inami": {
-    title: "Muh Traidtion",
+    title: "Muh Tradition",
     description: "Don't even deny it..."
   },
   "Yhorm-Porg-Owltz-Inami": {
